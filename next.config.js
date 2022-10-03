@@ -9,6 +9,7 @@ const nextConfig = {
 
   experimental: {
     images: {
+      newNextLinkBehavior: true, // With this option enabled, Link component add anchor tag on content
       allowFutureImage: true,
     }
   }
