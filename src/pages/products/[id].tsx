@@ -4,16 +4,19 @@ import Image from "next/future/image"
 import Head from "next/head"
 import { useState } from "react"
 import Stripe from "stripe"
+import { useShoppingCart } from "use-shopping-cart"
 import { stripe } from "../../lib/stripe"
 import { ProductContainer, ImageContainer, ProductDetails, BuyButton } from "../../styles/pages/products.styles"
 import { priceFormatter } from "../../utils/priceFormatter"
 
 type Product = {
+  id: string;
   defaultPriceId: string;
   imageUrl: string;
   name: string;
   price: string;
   description: string;
+  priceUnit: number
 }
 
 type ProductProps = {
@@ -22,20 +25,19 @@ type ProductProps = {
 
 export default function Product({ product }: ProductProps) {
   const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] = useState(false)
+  const { addItem } = useShoppingCart()
 
-  const handleBuyProduct = async () => {
-    try {
-      setIsCreatingCheckoutSession(true)
-
-      const response = await axios.post('/api/create-checkout', {
-        price_id: product.defaultPriceId
-      })
-
-      window.location.href = response.data.checkout_url
-    } catch (error) {
-      setIsCreatingCheckoutSession(false)
-      alert('Falha ao redirecionar ao checkout!')
+  const handleAddProductToCart = async () => {
+    const productToCart = {
+      id: product.id,
+      name: product.name,
+      price_id: product.defaultPriceId,
+      price: product.priceUnit,
+      currency: 'BRL',
+      image: product.imageUrl,
     }
+
+    addItem(productToCart, { count: 1 })
   }
 
   return (
@@ -54,8 +56,8 @@ export default function Product({ product }: ProductProps) {
 
           <p>{product.description}</p>
 
-          <BuyButton disabled={isCreatingCheckoutSession} onClick={handleBuyProduct}>
-            Comprar agora
+          <BuyButton disabled={isCreatingCheckoutSession} onClick={handleAddProductToCart}>
+            Adicionar ao carrinho
           </BuyButton>
         </ProductDetails>
       </ProductContainer>
@@ -90,10 +92,12 @@ export const getStaticProps: CustomGetStaticProps = async ({ params }) => {
   return {
     props: {
       product: {
+        id: product.id,
         defaultPriceId: price.id,
         imageUrl: product.images[0],
         name: product.name,
         price: priceFormatter(price.unit_amount / 100),
+        priceUnit: price.unit_amount / 100,
         description: product.description,
       }
     },

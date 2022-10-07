@@ -39,7 +39,9 @@ export const ProductFooter = styled('footer', {
   bottom: '0.25rem',
   left: '0.25rem',
   right: '0.25rem',
-  padding: '2rem',
+  padding: '1.25rem',
+  cursor: 'default',
+  zIndex: 999,
 
   borderRadius: 6,
 
@@ -53,13 +55,35 @@ export const ProductFooter = styled('footer', {
   opacity: 0,
   transition: 'all 0.2s ease-in-out',
 
-  strong: {
-    fontSize: '$lg'
+  div: {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+
+    strong: {
+      fontSize: '$lg'
+    },
+  
+    span: {
+      fontSize: '$xl',
+      fontWeight: 'bold',
+      color: '$green300'
+    },
   },
 
-  span: {
-    fontSize: '$xl',
-    fontWeight: 'bold',
-    color: '$green300'
-  },
+  // button: {
+  //   border: 0,
+  //   width: '3.5rem',
+  //   height: '3.5rem',
+  //   borderRadius: 6,
+
+  //   display: 'flex',
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  //   backgroundColor: '$green500',
+
+  //   '&:hover': {
+  //     backgroundColor: '$green300',
+  //   },
+  // },
 })

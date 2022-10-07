@@ -1,14 +1,15 @@
 import type { GetStaticProps } from 'next'
 import Image from 'next/future/image'
+import Link from 'next/link'
+import Head from 'next/head'
 import type Stripe from 'stripe'
 import { useKeenSlider } from 'keen-slider/react'
 import 'keen-slider/keen-slider.min.css'
 
-import { HomeContainer, Product, ProductFooter } from '../styles/pages/home.styles'
 import { stripe } from '../lib/stripe'
-import Link from 'next/link'
 import { priceFormatter } from '../utils/priceFormatter'
-import Head from 'next/head'
+import { CartButton } from '../components/CartButton'
+import { HomeContainer, Product, ProductFooter } from '../styles/pages/home.styles'
 
 type HomeProps = {
   products: Array<{
@@ -39,8 +40,12 @@ export default function Home({ products }: HomeProps) {
               <Image src={product.imageUrl} width={520} height={480} alt="" />
 
               <ProductFooter>
-                <strong>{product.name}</strong>
-                <span>{product.price}</span>
+                <div>
+                  <strong>{product.name}</strong>
+                  <span>{product.price}</span>
+                </div>
+
+                <CartButton variant="green" />
               </ProductFooter>
             </Product>
           </Link>
