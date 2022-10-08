@@ -5,6 +5,7 @@ import Head from "next/head"
 import { useState } from "react"
 import Stripe from "stripe"
 import { useShoppingCart } from "use-shopping-cart"
+import { useCart } from "../../hooks/useCart"
 import { stripe } from "../../lib/stripe"
 import { ProductContainer, ImageContainer, ProductDetails, BuyButton } from "../../styles/pages/products.styles"
 import { priceFormatter } from "../../utils/priceFormatter"
@@ -25,19 +26,19 @@ type ProductProps = {
 
 export default function Product({ product }: ProductProps) {
   const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] = useState(false)
-  const { addItem } = useShoppingCart()
+  const { findProductById, updateProductQuantity, addItem } = useCart()
 
   const handleAddProductToCart = async () => {
-    const productToCart = {
-      id: product.id,
-      name: product.name,
-      price_id: product.defaultPriceId,
-      price: product.priceUnit,
-      currency: 'BRL',
-      image: product.imageUrl,
-    }
+    const item = findProductById(product.id)
 
-    addItem(productToCart, { count: 1 })
+    if (item) {
+      updateProductQuantity(product.id, item.quantity + 1)
+    } else {
+      addItem({
+        product,
+        quantity: 1,
+      })
+    }
   }
 
   return (

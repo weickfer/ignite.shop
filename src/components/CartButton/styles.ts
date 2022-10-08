@@ -9,6 +9,13 @@ export const ButtonContainer = styled('button', {
   alignItems: 'center',
   justifyContent: 'center',
 
+  position: 'relative',
+
+  '&:disabled': {
+    opacity: 0.8,
+    cursor: 'not-allowed'
+  },
+
   variants: {
     size: {
       small: {

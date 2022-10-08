@@ -1,16 +1,16 @@
-import SwipeableDrawer from "@mui/material/SwipeableDrawer";
-import Image from "next/future/image";
-import { X } from "phosphor-react";
-import { useState } from "react";
-import { useShoppingCart } from "use-shopping-cart";
-import logoImg from '../../assets/logo.svg'
-import { CartButton } from "../CartButton";
 
-import { CartItem, DrawerContainer, DrawerMain, HeaderContainer } from "./styles";
+import Image from "next/future/image";
+import { useState } from "react";
+import logoImg from '../../assets/logo.svg'
+import { useCart } from "../../hooks/useCart";
+import { CartButton } from "../CartButton";
+import { Drawer } from "../Drawer";
+
+import { HeaderContainer, TotalCartCounter } from "./styles";
 
 export function Header() {
   const [drawerIsOpen, setDrawerIsOpen] = useState(false)
-  const { handleCloseCart } = useShoppingCart()
+  const { itemsCount } = useCart()
 
   const handleOpenDrawer = () => setDrawerIsOpen(true)
   const handleCloseDrawer = () => setDrawerIsOpen(false)
@@ -19,33 +19,23 @@ export function Header() {
     <HeaderContainer>
       <Image src={logoImg} alt="Shop" />
 
-      <CartButton variant="gray" onClick={handleOpenDrawer} />
+      <CartButton 
+        variant="gray" 
+        onClick={handleOpenDrawer} 
+        disabled={itemsCount === 0}
+      >
+        { itemsCount > 0 && (
+          <TotalCartCounter>
+            <span>{itemsCount}</span>
+          </TotalCartCounter>
+        ) }
+      </CartButton>
 
-      <SwipeableDrawer 
-        anchor="right"
+      <Drawer
         open={drawerIsOpen}
         onOpen={handleOpenDrawer}
         onClose={handleCloseDrawer}
-        
-      >
-        <DrawerContainer>
-          <button onClick={handleCloseDrawer}>
-            <X weight="bold" size={24} color="#8D8D99" />
-          </button>
-
-          <DrawerMain>
-            <h1>Sacola de compras</h1>
-
-            <ul>
-              <CartItem>
-                <div>
-                  {/* <Image width={94} height={94} /> */}
-                </div>
-              </CartItem>
-            </ul>
-          </DrawerMain>
-        </DrawerContainer>
-      </SwipeableDrawer>
+      />
     </HeaderContainer>
   )
 }
