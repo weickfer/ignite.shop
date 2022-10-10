@@ -36,14 +36,48 @@ export const SuccessContainer = styled('main', {
   }
 });
 
+export const ProductsImagesContainer = styled('section', {
+  position: 'relative',
+  width: '100%',
+  height: 200,
+
+  div: {
+    position: 'absolute',
+    left: '50%',
+    transform: 'translateX(-50%)',
+  },
+  
+
+  variants: {
+    position: {
+      // haveOne: {},
+      haveTwo: {
+        transform: 'translateX(calc(0px - 45px))',
+
+        'div:last-child': {
+          marginLeft: 90,
+        },
+      },
+      haveThree: {
+        'div:first-child': {
+          left: '35%',
+        },
+        'div:last-child': {
+          marginLeft: 90,
+        },
+      },
+    }
+  },
+})
+
 export const ImageContainer = styled('div', {
   width: '100%',
-  maxWidth: 130,
-  height: 145,
+  height: '100%',
+  maxWidth: 140,
+  maxHeight: 140,
   background: 'linear-gradient(180deg, #1ea483 0%, #7465d4 100%)',
-  borderRadius: 8,
-  padding: '0.25rem',
-  marginTop: '4rem',
+  borderRadius: 70,
+  // padding: '0.25rem',
 
   display: 'flex',
   alignItems: 'center',
@@ -54,3 +88,23 @@ export const ImageContainer = styled('div', {
     objectFit: 'cover',
   }
 });
+
+export const HaveMoreItems = styled('div', {
+  width: '100%',
+  height: '100%',
+  maxWidth: 140,
+  maxHeight: 140,
+  borderRadius: 70,
+  backgroundColor: '$gray800',
+  border: '3px solid $gray900',
+
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+
+  span: {
+    fontSize: '$md',
+    fontWeight: 'bold',
+    color: '$white',
+  },
+})

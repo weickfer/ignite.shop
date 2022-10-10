@@ -1,4 +1,6 @@
+import axios from "axios";
 import { createContext, ReactNode, useState } from "react";
+import { priceFormatter } from "../utils/priceFormatter";
 
 type Product = {
   id: string;
@@ -20,10 +22,12 @@ type AddItemInput = { product: Product, quantity: number }
 type CartContextData = {
   items: Item[]
   itemsCount: number
+  totalPriceFormatted: string
   addItem(input: AddItemInput): void
   removeItem(productId: string): number
   findProductById(productId: string): Item
   updateProductQuantity(productId: string, newValue: number): void
+  createCheckoutUrl: () => Promise<string>
 }
 
 export const CartContext = createContext({} as CartContextData)
@@ -35,6 +39,13 @@ type CartProvider = {
 export function CartProvider({ children }: CartProvider) {
   const [items, setItems] = useState([] as Array<Item>)
   const itemsCount = items.length
+  const totalPriceFormatted = priceFormatter(
+    items.reduce((acc, { product, quantity }) => {
+      acc += product.priceUnit * quantity
+  
+      return acc
+    }, 0)
+  )
 
   const addItem = ({ product, quantity }: AddItemInput) => {
     setItems(oldState => {
@@ -70,14 +81,30 @@ export function CartProvider({ children }: CartProvider) {
     }))
   }
 
+  const createCheckoutUrl = async () => {
+    try {
+      const products = items.map(item => ({
+        price_id: item.product.defaultPriceId,
+        quantity: item.quantity
+      }))
+      const response = await axios.post('/api/create-checkout', { products })
+
+      return response.data.checkout_url
+    } catch (error) {
+      
+    }
+  }
+
   return (
     <CartContext.Provider value={{
       items,
       itemsCount,
+      totalPriceFormatted,
       addItem,
       removeItem,
       findProductById,
       updateProductQuantity,
+      createCheckoutUrl,
     }}>
       {children}
     </CartContext.Provider>

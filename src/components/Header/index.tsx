@@ -1,5 +1,6 @@
 
 import Image from "next/future/image";
+import Link from "next/link";
 import { useState } from "react";
 import logoImg from '../../assets/logo.svg'
 import { useCart } from "../../hooks/useCart";
@@ -17,7 +18,9 @@ export function Header() {
 
   return (
     <HeaderContainer>
-      <Image src={logoImg} alt="Shop" />
+      <Link href="/">
+        <Image src={logoImg} alt="Shop" />
+      </Link>
 
       <CartButton 
         variant="gray" 

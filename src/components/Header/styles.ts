@@ -14,6 +14,10 @@ export const HeaderContainer = styled('header', {
     cursor: 'pointer',
     // position: 'relative',
   },
+
+  a: {
+    cursor: 'pointer'
+  }
 })
 
 export const TotalCartCounter = styled('div', {

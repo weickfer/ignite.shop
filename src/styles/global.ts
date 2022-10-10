@@ -10,6 +10,7 @@ const globalStyles = globalCss({
     '-webkit-font-smoothing': 'antialiased',
     backgroundColor: '$gray900',
     color: '$gray100',
+    boxSizing: 'border-box',
   },
 
   'body, input, textarea, button': {
